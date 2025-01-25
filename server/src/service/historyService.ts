@@ -1,5 +1,4 @@
 import fs from "node:fs/promises";
-import path from 'path';
 
 // TODO: Define a City class with name and id properties
 class City { 

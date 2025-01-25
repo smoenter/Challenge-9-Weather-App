@@ -1,8 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-const API_KEY = process.env.WEATHER_API_KEY || '';  
-const API_BASE_URL = process.env.API_BASE_KEY || '';
 
 // TODO: Define an interface for the Coordinates object
 interface Coordinates {
@@ -19,6 +17,7 @@ class Weather{
     windSpeed: number;
     condition: string;
     description: string;
+    weatherImage: string;
 
     constructor(
       cityName: string,
@@ -28,6 +27,7 @@ class Weather{
       windSpeed: number,
       condition: string,
       description: string,
+      weatherImage: string,
     ) {
       this.cityName = cityName;
       this.coordinates = coordinates;
@@ -36,6 +36,7 @@ class Weather{
       this.windSpeed = windSpeed;
       this.condition = condition;
       this.description = description;
+      this.weatherImage = weatherImage
     }
   }
 
@@ -189,7 +190,8 @@ class WeatherService {
         currentWeather.humidity,
         currentWeather.windSpeed,
         weatherData.weather[0].main,
-        currentWeather.description
+        currentWeather.description,
+        '' // Add a placeholder for weatherImage
       );
       const forecastArray = this.buildForecastArray([weatherData]);
       
