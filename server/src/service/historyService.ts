@@ -1,4 +1,6 @@
 import fs from "node:fs/promises";
+import path from 'path';
+
 // TODO: Define a City class with name and id properties
 class City { 
   constructor(public name: string, public id: string) {
@@ -24,7 +26,7 @@ class HistoryService {
   // async getCities() {}
   async getCities() {
     return await this.read().then((cities) => {
-      let parsedCities: Cities[];
+      let parsedCities: City[];
       try {
         parsedCities = [].concat(JSON.parse(cities));
       } catch (err) {
@@ -36,8 +38,19 @@ class HistoryService {
   // TODO Define an addCity method that adds a city to the searchHistory.json file
   // async addCity(city: string) {}
 async addCity(city: string) {
-  if(!city) {
-    throw new Error('city cannot be blank');
+  try {
+    const data = await fs.readFile('searchHistory.json', 'utf8');
+    const cities = JSON.parse(data);
+
+    const newCity= {
+      id: generateUniqueId(),
+      name: city
+    };
+    cities.push(newCity);
+    await fs.writeFile('searchHistory.json', JSON.stringify(cities, null, 2));
+    console.log(`City "${city}" has been added successfully.`);
+  } catch (error) {
+    console.error('Error adding city:', error);
   }
 }
 
@@ -45,10 +58,18 @@ async addCity(city: string) {
   // * BONUS TODO: Define a removeCity method that removes a city from the searchHistory.json file
   // async removeCity(id: string) {}
   async removeCity(id: string) {
-    return await this.getCities()
-    .then(cities) => this.getCities.filter((city) => city.id !== id))
-    .then((filteredCities)) => this.write(filterdCities));
+    const data = await fs.readFile('searchHistory.json', 'utf8');
+    const cities= JSON.parse(data);
+    const updatedCities= cities.filter((city: { id: string }) => city.id !==id);
+    await fs.writeFile('searchHistory.json', JSON.stringify(updatedCities, null, 2));
+    console.log(`City with id ${id} has been removed successfuly.`);
+  }catch (error: unknown) {
+    console.error('Error removing city:', error);
   }
+}  
+   
+export default new HistoryService();
+function generateUniqueId() {
+  throw new Error("Function not implemented.");
 }
 
-export default new HistoryService();
