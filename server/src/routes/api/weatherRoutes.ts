@@ -1,9 +1,11 @@
-import { type Request, type Response } from 'express';
-import weatherService from '../../service/weatherService';
+import express, { type Request, type Response } from 'express';
 import historyService from '../../service/historyService';
+import WeatherService from '../../service/weatherService';
 
-const express = require('express');
+
 const router = express.Router();
+const weatherService = new WeatherService();
+
 
 
 // import HistoryService from '../../service/historyService.js';

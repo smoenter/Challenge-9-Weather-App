@@ -49,16 +49,17 @@ class WeatherService {
   private cityName: string;
 
   constructor() {
-    this.baseURL = 'https://api.openweathermap.org/data/2.5'
+    this.baseURL = 'https://api.openweathermap.org/data/2.5';
     this.apiKey = process.env.API_KEY || '';
     this.cityName = '';
   }
 
   // TODO: Create destructureLocationData method
   // private destructureLocationData(locationData: Coordinates): Coordinates {}
- private destructureLocationData(locationData: Coordinates): Coordinates {
-  const {latitude, longitude} = locationData;
-  return {latitude, longitude};
+ private destructureLocationData(locationData: any): Coordinates {
+  const latitude = locationData.lat || locationData.latitude;
+  const longitude = locationData.lon || locationData.longitude;
+  return { latitude, longitude };
  }
   // TODO: Create buildGeocodeQuery method
   // private buildGeocodeQuery(): string {}
@@ -73,7 +74,7 @@ class WeatherService {
   // TODO: Create buildWeatherQuery method
   // private buildWeatherQuery(coordinates: Coordinates): string {}
   private buildWeatherQuery(coordinates: Coordinates): string {
-    const {latitude, longitude} = coordinates;
+    const { latitude, longitude } = coordinates;
     const apiKey = process.env.WEATHER_API_KEY;
     return `${this.baseURL}?lat=${latitude}&lon=${longitude}&appid=${apiKey}`;
   }
@@ -102,35 +103,21 @@ class WeatherService {
   // TODO: Create fetchWeatherData method
   // private async fetchWeatherData(coordinates: Coordinates) {}
   private async fetchWeatherData(coordinates: Coordinates): Promise<any> {
+    const weatherQueryUrl = this.buildWeatherQuery(coordinates);
    try {
-    if (!this.cityName) {
-      throw new Error('City name is not defined');
-    }
-    const locationData = await this.fetchAndDestructureLocationData(this.cityName);
-    const coordinates: Coordinates = { latitude: locationData.lat, longitude: locationData.lon };
-    const weatherQuery = this.buildWeatherQuery(coordinates);
-    const response = await fetch(weatherQuery);
-
+    const response = await fetch(weatherQueryUrl);
     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      throw new Error(`Error fetching weather data: ${response.statusText}`);
     }
-    const weatherData = await response.json();
-    const fiveDayForecast = weatherData.list.map((day: any) => ({
-      date: day.dt_txt,
-      temperature: day.main.temp,
-      humidity: day.main.humidity,
-      windSpeed: day.wind.speed,
-      weatherDescription: day.weather[0].description
-    }));
-    return {
-      location: locationData,
-      forecast: fiveDayForecast,
-    };
+     const data = await response.json();
+
+     return data;
    } catch (error) {
-    console.error('Error fetching weather data', error);
+    console.error('Error fetching weather data:', error);
     throw error;
    }
 }
+
   // TODO: Build parseCurrentWeather method
   // private parseCurrentWeather(response: any) {}
   private parseCurrentWeather(response: any): { temperature: number, description: string, humidity: number, windSpeed: number } {
@@ -178,7 +165,7 @@ class WeatherService {
       const {lat, lon} = await this.fetchAndDestructureLocationData(city);
       const weatherData = await this.fetchWeatherData({ latitude: lat, longitude: lon });
       const currentWeather = this.parseCurrentWeather(weatherData);
-      const weather = new Weather(
+      new Weather(
         city,
         { latitude: lat, longitude: lon },
         currentWeather.temperature,
@@ -203,4 +190,4 @@ class WeatherService {
   }
 
 
-export default new WeatherService();
+export default WeatherService;
