@@ -18,7 +18,7 @@ class HistoryService {
   }
   // TODO: Define a write method that writes the updated cities array to the searchHistory.json file
   // private async write(cities: City[]) {}
-  private async write(cities: City []) {
+  private async write(cities: City []): Promise<void> {
     return await fs.writeFile('db/db.json', JSON.stringify(cities, null, '\t'));
   }
   // TODO: Define a getCities method that reads the cities from the searchHistory.json file and returns them as an array of City objects
@@ -46,7 +46,7 @@ async addCity(city: string) {
       name: city
     };
     cities.push(newCity);
-    await fs.writeFile('searchHistory.json', JSON.stringify(cities, null, 2));
+    await this.write(cities);
     console.log(`City "${city}" has been added successfully.`);
   } catch (error) {
     console.error('Error adding city:', error);
@@ -60,12 +60,12 @@ async addCity(city: string) {
     const data = await fs.readFile('searchHistory.json', 'utf8');
     const cities= JSON.parse(data);
     const updatedCities= cities.filter((city: { id: string }) => city.id !==id);
-    await fs.writeFile('searchHistory.json', JSON.stringify(updatedCities, null, 2));
-    console.log(`City with id ${id} has been removed successfuly.`);
-  }catch (error: unknown) {
+    await this.write(updatedCities);
+    console.log(`City with id ${id} has been removed successfully.`);
+  } catch (error: unknown) {
     console.error('Error removing city:', error);
   }
-}  
+}
    
 export default new HistoryService();
 function generateUniqueId() {

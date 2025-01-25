@@ -40,11 +40,6 @@ class Weather{
     }
   }
 
-  interface WeatherImage {
-    url: string;
-    title: string;
-    altText: string;
-  }
  
 //TODO: Complete the WeatherService class
 class WeatherService {

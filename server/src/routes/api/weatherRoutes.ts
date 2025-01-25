@@ -4,7 +4,6 @@ import historyService from '../../service/historyService';
 
 const express = require('express');
 const router = express.Router();
-const app = express();
 
 
 // import HistoryService from '../../service/historyService.js';
