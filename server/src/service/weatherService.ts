@@ -58,24 +58,6 @@ class WeatherService {
     this.cityName = '';
   }
 
-  // TODO: Create fetchLocationData method
-  // private async fetchLocationData(query: string) {}
-  private async fetchLocationData(query: string) {
-     const apiKey = process.env.WEATHER_API_KEY;
-     const url= `https://api.locationiq.com/v1/autocomplete.php?key=${apiKey}&q=${query}&format=json`;
-     
-     try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`Error fetching location data: ${response.statusText}`);
-      }
-      const data = await response.json();
-      return data;
-     } catch (error) {
-      console.error('Error:', error);
-      throw error;
-     }
-  }
   // TODO: Create destructureLocationData method
   // private destructureLocationData(locationData: Coordinates): Coordinates {}
  private destructureLocationData(locationData: Coordinates): Coordinates {
@@ -171,7 +153,7 @@ class WeatherService {
   
   // TODO: Complete buildForecastArray method
   // private buildForecastArray(currentWeather: Weather, weatherData: any[]) {}
-  private buildForecastArray(currentWeather: Weather, weatherData: any []) {
+  private buildForecastArray(weatherData: any []) {
     const forecastArray = [];
     for (const data of weatherData) {
       if (!data || !data.main || !data.weather || !data.dt) {
@@ -209,7 +191,7 @@ class WeatherService {
         weatherData.weather[0].main,
         currentWeather.description
       );
-      const forecastArray = this.buildForecastArray(weather, [weatherData]);
+      const forecastArray = this.buildForecastArray([weatherData]);
       
       return {
         city,
