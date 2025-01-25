@@ -2,15 +2,22 @@ import { Router, type Request, type Response } from 'express';
 import weatherService from '../../service/weatherService';
 import historyService from '../../service/historyService';
 
-const router = Router();
+const express = require('express');
+const router = express.Router();
+const app = express();
+
 
 
 // import HistoryService from '../../service/historyService.js';
 // import WeatherService from '../../service/weatherService.js';
 
 // TODO: POST Request with city name to retrieve weather data
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', async (req: Request, res: Response): Promise<void> => {
   const { city } = req.body;
+  if (!city) {
+    res.status(400).json({ error: 'City name is required' });
+    return;
+  }
 
   // TODO: GET weather data from city name
   try {
@@ -28,13 +35,23 @@ router.post('/', async (req: Request, res: Response) => {
 
 
 // TODO: GET search history
-router.get('/history', async (req: Request, res: Response) => {
+interface City {
+  id: string;
+  name: string;
+}
+
+interface ErrorResponse {
+  error: string;
+}
+
+router.get('/history', async (_: Request, res: Response): Promise<void> => {
   try {
-    const cities = await historyService.getCities();
+    const cities: City[] = await historyService.getCities();
     res.status(200).json(cities);
   } catch (error) {
     console.error('Error fetching search history:', error);
-    res.status(500).json({ error: 'Failed to fetch search history' });
+    const errorResponse: ErrorResponse = { error: 'Failed to fetch search history' };
+    res.status(500).json(errorResponse);
   }
 });
 
