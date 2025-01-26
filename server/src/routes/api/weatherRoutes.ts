@@ -1,5 +1,5 @@
 import express, { type Request, type Response } from 'express';
-import historyService from '../../service/historyService';
+import HistoryService from '../../service/historyService';
 import WeatherService from '../../service/weatherService'; 
 
 const router = express.Router();
@@ -20,7 +20,7 @@ router.post('/', async (req: Request, res: Response): Promise<void> => {
     const weatherData = await weatherService.getWeatherForCity(city);
 
     // TODO: save city to search history
-    await historyService.addCity(city);
+    await HistoryService.addCity(city);
 
     res.status(200).json(weatherData);
   } catch (error) {
@@ -42,7 +42,7 @@ interface ErrorResponse {
 
 router.get('/history', async (_: Request, res: Response): Promise<void> => {
   try {
-    const cities: City[] = await historyService.getCities();
+    const cities: City[] = await HistoryService.getCities();
     res.status(200).json(cities);
   } catch (error) {
     console.error('Error fetching search history:', error);
@@ -57,7 +57,7 @@ router.delete('/history/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
-    await historyService.removeCity(id);
+    await HistoryService.removeCity(id);
     res.status(200).json({ message: 'City removed from search history' });
   } catch (error) {
     console.error('Error removing city from search history:', error);
