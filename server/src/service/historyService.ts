@@ -1,4 +1,5 @@
 import fs from "node:fs/promises";
+import { v4 as uuidv4 } from 'uuid';
 
 // TODO: Define a City class with name and id properties
 class City { 
@@ -38,21 +39,19 @@ class HistoryService {
   // async addCity(city: string) {}
 async addCity(city: string) {
   try {
-    const data = await fs.readFile('searchHistory.json', 'utf8');
-    const cities = JSON.parse(data);
-
-    const newCity= {
-      id: generateUniqueId(),
-      name: city
+    const data = await fs.readFile('searchHistoy.json', 'utf8');
+    const searchHistory = JSON.parse(data);
+    const newCity = {
+      id: uuidv4(),
+      name: city,
     };
-    cities.push(newCity);
-    await this.write(cities);
-    console.log(`City "${city}" has been added successfully.`);
+    searchHistory.push(newCity);
+    await fs.writeFile('searchHistory.json', JSON.stringify(searchHistory, null, 2));
+    console.log(`City "${city}" added to search history.`);
   } catch (error) {
-    console.error('Error adding city:', error);
+    console.error('Error adding city to search history:', error);
   }
 }
-
 
   // * BONUS TODO: Define a removeCity method that removes a city from the searchHistory.json file
   // async removeCity(id: string) {}
@@ -68,7 +67,7 @@ async addCity(city: string) {
 }
    
 export default new HistoryService();
-function generateUniqueId() {
-  throw new Error("Function not implemented.");
-}
+
+
+
 

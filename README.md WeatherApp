@@ -1,0 +1,47 @@
+# WeatherApp
+
+## Description
+WeatherApp is a web application that allows users to get real-time weather information for any city in the world. The app provides current weather conditions, a 5-day forecast, and other relevant weather data.
+
+## Features
+- Search for current weather by city name
+- Display current temperature, humidity, wind speed, and weather conditions
+- 5-day weather forecast
+- Responsive design for mobile and desktop
+
+## Installation
+1. Clone the repository:
+    ```
+    git clone https://github.com/yourusername/weatherapp.git
+    ```
+2. Navigate to the project directory:
+    ```
+    cd weatherapp
+    ```
+3. Install the dependencies:
+    ```
+    npm install
+    ```
+
+## Usage
+1. Start the development server:
+    ```
+    npm start
+    ```
+2. Open your web browser and go to `http://localhost:3000`
+
+## Technologies Used
+- HTML
+- CSS
+- JavaScript
+- React
+- OpenWeatherMap API
+
+## Contributing
+Contributions are welcome! Please fork the repository and create a pull request with your changes.
+
+## License
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Acknowledgements
+- [OpenWeatherMap](https://openweathermap.org/) for providing the weather data API

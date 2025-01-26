@@ -1,6 +1,6 @@
 import express, { type Request, type Response } from 'express';
-import historyService from '../../service/historyService';
 import WeatherService from '../../service/weatherService';
+import historyService from '../../service/historyService';
 
 
 const router = express.Router();
