@@ -1,65 +1,49 @@
 # WeatherApp
 
-## Description
-WeatherApp is a simple application that allows users to get the current weather information for any city. It provides temperature, humidity, wind speed, and a brief weather description.
-
 ## Table of Contents
-- [Installation](#installation)
-- [Usage](#usage)
-- [License](#license)
-- [Links](#links)
-- [Contributing](#contributing)
-- [Acknowledgements](#acknowledgements)
+1. [Introduction](#introduction)
+2. [Features](#features)
+3. [Links](#links) 
+4. [Installation](#installation)
+5. [Usage](#usage)
+6. [Contributing](#contributing)
+7. [License](#license)
+8. [Acknowledgements](#acknowledgements)
+
+## Introduction
+WeatherApp is a simple application that provides weather information for different locations.
 
 ## Features
-- Search for current weather by city name
-- Display temperature, humidity, wind speed, and weather description
-- User-friendly interface
-
-## Installation
-1. Clone the repository:
-    ```
-    git clone https://github.com:smoenter/Challenge-9-Weather-App.git
-    ```
-2. Navigate to the project directory:
-    ```
-    cd weatherapp
-    ```
-3. Install the dependencies:
-    ```
-    npm install
-    ```
-
-## Usage
-1. Start the application:
-    ```
-    npm start
-    ```
-2. Open your browser and go to `http://localhost:3000`
-3. Enter the city name in the search bar and click "Search" to get the current weather information.
-
-## Technologies Used
-- HTML
-- CSS
-- JavaScript
-- Node.js
-- Express
-- OpenWeatherMap API
-
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+- Current weather conditions
+- 5-day weather forecast
+- Search by city name
 
 ## Links
 - [GitHub Repository](https://github.com/smoenter/Challenge-9-Weather-App)
 - https://challenge-9-weather-app.onrender.com
 
+
+## Installation
+To install the WeatherApp, follow these steps:
+1. Clone the repository (git clone https://github.com:smoenter/Challenge-9-Weather-App.git)
+2. Navigate to the project directory (cd WeatherApp)
+3. Install the dependencies (npm install)
+
+## Usage
+To use the WeatherApp, follow these steps:
+1. Open the application
+2. Enter the city name in the search bar
+3. View the weather information
+
 ## Contributing
+If you would like to contribute to the WeatherApp, please follow these guidelines:
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/YourFeature`)
-3. Add your changes (`git add -A`)
-4. Commit your changes (`git commit -m 'Add what you changed'`)
-5. Push to the branch (`git push origin feature/YourFeature`)
-6. Open a pull request
+2. Create a new branch
+3. Make your changes
+4. Submit a pull request
+
+## License
+This project is licensed under the MIT License.
 
 ## Acknowledgements
 - [OpenWeatherMap](https://openweathermap.org/) for providing the weather data API

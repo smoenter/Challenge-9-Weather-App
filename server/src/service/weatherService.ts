@@ -44,16 +44,11 @@ class Weather {
 //TODO: Complete the WeatherService class
 class WeatherService {
   // TODO: Define the baseURL, API key, and city name properties
-  private baseURL: string;
-  private apiKey: string;
-  private cityName: string;
+  private baseURL: string= 'https://api.openweathermap.org/data/2.5';
+  private apiKey: string = process.env.API_KEY || '';
+  private cityName: string = '';
 
-  constructor() {
-    this.baseURL = 'https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}';
-    this.apiKey = process.env.API_KEY || '';
-    this.cityName = '';
-  }
-
+    
   // TODO: Create destructureLocationData method
   // private destructureLocationData(locationData: Coordinates): Coordinates {}
   private destructureLocationData(locationData: any): Coordinates {
@@ -174,7 +169,7 @@ class WeatherService {
         currentWeather.windSpeed,
         weatherData.weather[0].main,
         currentWeather.description,
-        '' // Add a placeholder for weatherImage
+        '' 
       );
       const forecastArray = this.buildForecastArray([weatherData]);
 

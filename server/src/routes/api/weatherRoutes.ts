@@ -1,15 +1,11 @@
 import express, { type Request, type Response } from 'express';
-import WeatherService from '../../service/weatherService';
 import historyService from '../../service/historyService';
-
+import WeatherService from '../../service/weatherService'; 
 
 const router = express.Router();
 const weatherService = new WeatherService();
 
 
-
-// import HistoryService from '../../service/historyService.js';
-// import WeatherService from '../../service/weatherService.js';
 
 // TODO: POST Request with city name to retrieve weather data
 router.post('/', async (req: Request, res: Response): Promise<void> => {
