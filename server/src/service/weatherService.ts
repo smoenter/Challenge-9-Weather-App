@@ -157,7 +157,7 @@ class WeatherService {
   // async getWeatherForCity(city: string) {}
   async getWeatherForCity(city: string): Promise<any> {
     try {
-      this.cityName = city;
+      this.cityName;
       const { lat, lon } = await this.fetchAndDestructureLocationData(city);
       const weatherData = await this.fetchWeatherData({ lat, lon });
       const currentWeather = this.parseCurrentWeather(weatherData);

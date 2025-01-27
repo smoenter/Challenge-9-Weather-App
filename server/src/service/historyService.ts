@@ -11,6 +11,7 @@ class City {
 
 // TODO: Complete the HistoryService class
 class HistoryService {
+  private searchHistoryFilePath = 'db/searchHistory.json';
   constructor () {
 
   }
@@ -18,7 +19,7 @@ class HistoryService {
   // TODO: Define a read method that reads from the searchHistory.json file
   // private async read() {}
   private async read() {
-    return await fs.readFile('db/searchHistory.json', {
+    return await fs.readFile(this.searchHistoryFilePath, {
        encoding: 'utf8',
     });
   }
@@ -26,24 +27,24 @@ class HistoryService {
   // TODO: Define a write method that writes the updated cities array to the searchHistory.json file
   // private async write(cities: City[]) {}
   private async write(cities: City []): Promise<void> {
-    return await fs.writeFile('db/searchHistory.json', JSON.stringify(cities, null, '\t'));
+    return await fs.writeFile(this.searchHistoryFilePath, JSON.stringify(cities, null, 2), 'utf-8');
   }
   // TODO: Define a getCities method that reads the cities from the searchHistory.json file and returns them as an array of City objects
   // async getCities() {}
-  async getCities() {
-    return await this.read().then((cities) => {
+  async getCities(): Promise<City[]> {
+      const data = await this.read();
       let parsedCities: City[];
       try {
-        parsedCities = [].concat(JSON.parse(cities));
+        parsedCities = JSON.parse(data);
       } catch (err) {
         parsedCities = [];
       }
       return parsedCities;
-    });
-  }
+    }
+  
   // TODO Define an addCity method that adds a city to the searchHistory.json file
   // async addCity(city: string) {}
-async addCity(city: string) {
+async addCity(city: string): Promise<void> {
   try {
     const data = await fs.readFile('searchHistoy.json', 'utf8');
     const searchHistory = JSON.parse(data);
