@@ -4,8 +4,8 @@ dotenv.config();
 
 // TODO: Define an interface for the Coordinates object
 interface Coordinates {
-  latitude: number;
-  longitude: number;
+  lat: number;
+  lon: number;
 }
 
 // TODO: Define a class for the Weather object
@@ -52,9 +52,9 @@ class WeatherService {
   // TODO: Create destructureLocationData method
   // private destructureLocationData(locationData: Coordinates): Coordinates {}
   private destructureLocationData(locationData: any): Coordinates {
-    const latitude = locationData.lat || locationData.latitude;
-    const longitude = locationData.lon || locationData.longitude;
-    return { latitude, longitude };
+    const lat = locationData.lat || locationData.latitude;
+    const lon = locationData.lon || locationData.longitude;
+    return { lat, lon };
   }
 
   // TODO: Create buildGeocodeQuery method
@@ -70,8 +70,8 @@ class WeatherService {
   // TODO: Create buildWeatherQuery method
   // private buildWeatherQuery(coordinates: Coordinates): string {}
   private buildWeatherQuery(coordinates: Coordinates): string {
-    const { latitude, longitude } = coordinates;
-    return `${this.baseURL}?lat=${latitude}&lon=${longitude}&appid=${this.apiKey}`;
+    const { lat, lon } = coordinates;
+    return `${this.baseURL}?lat=${lat}&lon=${lon}&appid=${this.apiKey}`;
   }
 
   // TODO: Create fetchAndDestructureLocationData method
@@ -140,7 +140,7 @@ class WeatherService {
       const date = new Date(data.dt * 1000);
       const temperature = data.main.temp;
       const weatherDescription = data.weather[0].description;
-      const humidity = data.main.humidty;
+      const humidity = data.main.humidity;
       const windSpeed = data.wind.speed;
 
       forecastArray.push({
@@ -157,13 +157,13 @@ class WeatherService {
   // async getWeatherForCity(city: string) {}
   async getWeatherForCity(city: string): Promise<any> {
     try {
-      this.cityName;
-      const { latitude, longitude } = await this.fetchAndDestructureLocationData(city);
-      const weatherData = await this.fetchWeatherData({ latitude, longitude });
+      this.cityName = city;
+      const { lat, lon } = await this.fetchAndDestructureLocationData(city);
+      const weatherData = await this.fetchWeatherData({ lat, lon });
       const currentWeather = this.parseCurrentWeather(weatherData);
       new Weather(
         city,
-        { latitude, longitude },
+        { lat, lon },
         currentWeather.temperature,
         currentWeather.humidity,
         currentWeather.windSpeed,
