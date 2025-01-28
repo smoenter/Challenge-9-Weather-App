@@ -9,18 +9,18 @@ const weatherService = new WeatherService();
 
 // TODO: POST Request with city name to retrieve weather data
 router.post('/', async (req: Request, res: Response): Promise<void> => {
-  const { city } = req.body;
-  if (!city) {
+  const { cityName } = req.body;
+  if (!cityName) {
     res.status(400).json({ error: 'City name is required' });
     return;
   }
 
   // TODO: GET weather data from city name
   try {
-    const weatherData = await weatherService.getWeatherForCity(city);
+    const weatherData = await weatherService.getWeatherForCity(cityName);
 
     // TODO: save city to search history
-    await HistoryService.addCity(city);
+    await HistoryService.addCity(cityName);
 
     res.status(200).json(weatherData);
   } catch (error) {

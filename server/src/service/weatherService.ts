@@ -10,33 +10,33 @@ interface Coordinates {
 
 // TODO: Define a class for the Weather object
 class Weather {
-  cityName: string;
-  coordinates: Coordinates;
-  temperature: number;
+  city: string;
+  tempF: number;
   humidity: number;
   windSpeed: number;
   condition: string;
-  description: string;
-  weatherImage: string;
+  iconDescription: string;
+  icon: string;
+  date: string;
 
   constructor(
-    cityName: string,
-    coordinates: Coordinates,
-    temperature: number,
-    humidity: number,
-    windSpeed: number,
-    condition: string,
-    description: string,
-    weatherImage: string,
+  city: string,
+  tempF: number,
+  humidity: number,
+  windSpeed: number,
+  condition: string,
+  iconDescription: string,
+  icon: string,
+  date: string
   ) {
-    this.cityName = cityName;
-    this.coordinates = coordinates;
-    this.temperature = temperature;
+    this.city = city;
+    this.tempF = tempF;
     this.humidity = humidity;
     this.windSpeed = windSpeed;
     this.condition = condition;
-    this.description = description;
-    this.weatherImage = weatherImage
+    this.iconDescription = iconDescription;
+    this.icon = icon;
+    this.date = date;
   }
 }
 
@@ -44,7 +44,7 @@ class Weather {
 //TODO: Complete the WeatherService class
 class WeatherService {
   // TODO: Define the baseURL, API key, and city name properties
-  private baseURL: string= 'https://api.openweathermap.org/data/2.5';
+  private baseURL: string= process.env.API_BASE_URL || '';
   private apiKey: string = process.env.API_KEY || '';
   private cityName: string = '';
 
@@ -60,10 +60,9 @@ class WeatherService {
   // TODO: Create buildGeocodeQuery method
   // private buildGeocodeQuery(): string {}
   private buildGeocodeQuery(location: string): string {
-    const apiKey = process.env.WEATHER_API_KEY;
-    const baseUrl = 'https://api.locationiq.com/v1/search.php';
-    const format = 'json';
-    const query = `${baseUrl}?key=${apiKey}&q=${encodeURIComponent(location)}&format=${format}`;
+    const apiKey = this.apiKey;
+    const baseUrl = 'http://api.openweathermap.org/geo/1.0/direct'
+    const query = `${baseUrl}?appid=${apiKey}&q=${encodeURIComponent(location)}`;
     return query;
   }
 
@@ -71,14 +70,14 @@ class WeatherService {
   // private buildWeatherQuery(coordinates: Coordinates): string {}
   private buildWeatherQuery(coordinates: Coordinates): string {
     const { lat, lon } = coordinates;
-    return `${this.baseURL}?lat=${lat}&lon=${lon}&appid=${this.apiKey}`;
+    return `${this.baseURL}/data/2.5/forecast?units=imperial&lat=${lat}&lon=${lon}&appid=${this.apiKey}`;
   }
 
   // TODO: Create fetchAndDestructureLocationData method
   // private async fetchAndDestructureLocationData() {}
   private async fetchAndDestructureLocationData(location: string): Promise<Coordinates> {
     const query = this.buildGeocodeQuery(location);
-    try {
+       try {
       const response = await fetch(query);
       if (!response.ok) {
         throw new Error(`Error fetching location data: ${response.statusText}`);
@@ -131,25 +130,25 @@ class WeatherService {
 
   // TODO: Complete buildForecastArray method
   // private buildForecastArray(currentWeather: Weather, weatherData: any[]) {}
-  private buildForecastArray(weatherData: any[]) {
+  private buildForecastArray(weatherData: any) {
+    console.log('weatherData2', weatherData.list[1]);
     const forecastArray = [];
-    for (const data of weatherData) {
+    const forecastData = weatherData.list.filter((weather: any) => weather.dt_txt.includes('12:00:00'));
+    for (const data of forecastData) {
       if (!data || !data.main || !data.weather || !data.dt) {
         continue;
       }
+      console.log('weatherData', data);
       const date = new Date(data.dt * 1000);
       const temperature = data.main.temp;
       const weatherDescription = data.weather[0].description;
       const humidity = data.main.humidity;
       const windSpeed = data.wind.speed;
-
-      forecastArray.push({
-        date: date.toLocaleDateString(),
-        temperature: temperature,
-        description: weatherDescription,
-        humidity: humidity,
-        windSpeed: windSpeed
-      });
+// TODO: push weather objects into forecast array
+      const weather = new Weather(this.cityName, temperature, humidity, windSpeed, 'blank', weatherDescription, 'icon', date.toLocaleDateString());
+      forecastArray.push(
+        weather 
+      );
     }
     return forecastArray;
   }
@@ -157,27 +156,16 @@ class WeatherService {
   // async getWeatherForCity(city: string) {}
   async getWeatherForCity(city: string): Promise<any> {
     try {
-      this.cityName;
+      this.cityName = city;
       const { lat, lon } = await this.fetchAndDestructureLocationData(city);
       const weatherData = await this.fetchWeatherData({ lat, lon });
-      const currentWeather = this.parseCurrentWeather(weatherData);
-      new Weather(
-        city,
-        { lat, lon },
-        currentWeather.temperature,
-        currentWeather.humidity,
-        currentWeather.windSpeed,
-        weatherData.weather[0].main,
-        currentWeather.description,
-        '' 
-      );
-      const forecastArray = this.buildForecastArray([weatherData]);
-
-      return {
-        city,
-        currentWeather,
-        forecast: forecastArray
-      };
+      // console.log('weatherData', weatherData);
+      console.log('weatherList', weatherData.list[0]);
+      const currentWeather = this.parseCurrentWeather(weatherData.list[0]);
+      const forecastArray = this.buildForecastArray(weatherData);
+      console.log(forecastArray);
+      return [currentWeather, ...forecastArray];
+      
     } catch (error) {
       console.error('Error fetching weather for city:', error);
       throw error;

@@ -11,7 +11,7 @@ class City {
 
 // TODO: Complete the HistoryService class
 class HistoryService {
-  private searchHistoryFilePath = 'db/searchHistory.json';
+  private searchHistoryFilePath = 'db/db.json';
   constructor () {
 
   }
@@ -46,14 +46,14 @@ class HistoryService {
   // async addCity(city: string) {}
 async addCity(city: string): Promise<void> {
   try {
-    const data = await fs.readFile('searchHistoy.json', 'utf8');
+    const data = await fs.readFile(this.searchHistoryFilePath, 'utf8');
     const searchHistory = JSON.parse(data);
     const newCity = {
       id: uuidv4(),
       name: city,
     };
     searchHistory.push(newCity);
-    await fs.writeFile('searchHistory.json', JSON.stringify(searchHistory, null, 2));
+    await fs.writeFile(this.searchHistoryFilePath, JSON.stringify(searchHistory, null, 2));
     console.log(`City "${city}" added to search history.`);
   } catch (error) {
     console.error('Error adding city to search history:', error);
@@ -63,7 +63,7 @@ async addCity(city: string): Promise<void> {
   // * BONUS TODO: Define a removeCity method that removes a city from the searchHistory.json file
   // async removeCity(id: string) {}
   async removeCity(id: string) {
-    const data = await fs.readFile('searchHistory.json', 'utf8');
+    const data = await fs.readFile(this.searchHistoryFilePath, 'utf8');
     const cities= JSON.parse(data);
     const updatedCities= cities.filter((city: { id: string }) => city.id !==id);
     await this.write(updatedCities);
